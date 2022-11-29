@@ -46,7 +46,7 @@ SoilSerializer >> classDescriptionFor: aClass [
 { #category : #initialization }
 SoilSerializer >> initialize [ 
 	super initialize.
-	objects := OrderedCollection new
+	internalObjects := OrderedCollection new
 ]
 
 { #category : #writing }
@@ -359,25 +359,18 @@ SoilSerializer >> registerObject: anObject ifAbsent: aBlock [
 	(anObject == clusterRoot) ifTrue: [ 
 		"later references could reference the cluster root so we put
 		it as first object to be able to have an internal reference to it"
-		objects add: anObject.
+		internalObjects add: anObject.
 		^ aBlock value ]. 
-	index := objects indexOf: anObject.
+	index := internalObjects indexOf: anObject.
 	(index > 0) ifTrue: [ 
 		self nextPutInternalReference: index.
 		^ self ].
-	externalIndex := externalObjectRegistry
-		ifNotNil: [ externalObjectRegistry indexOf: anObject ]
-		ifNil: [
-			"if there is no external object repository we cannot
-			resolve external objects, hence we treat them as  
-			internal. This might be too dangerous later and might
-			be removed" 
-			0 ].
-	((anObject == clusterRoot) not and: [ externalIndex > 0 ])
+	externalIndex := externalObjectRegistry indexOf: anObject.
+	(externalIndex > 0)
 		ifTrue: [ 
 			self nextPutExternalReference: externalIndex ]
 		ifFalse: [  
-			objects add: anObject.
+			internalObjects add: anObject.
 			aBlock value ] 
 
 ]

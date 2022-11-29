@@ -4,8 +4,8 @@ Class {
 	#instVars : [
 		'externalObjectRegistry',
 		'stream',
-		'objects',
-		'transaction'
+		'transaction',
+		'internalObjects'
 	],
 	#classVars : [
 		'CharacterEncoder'

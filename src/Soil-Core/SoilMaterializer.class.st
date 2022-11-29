@@ -223,7 +223,7 @@ SoilMaterializer >> nextFraction: aClass [
 SoilMaterializer >> nextInternalReference [
 	| index |
 	index := self nextLengthEncodedInteger.
-	^ objects at: index
+	^ internalObjects at: index
 ]
 
 { #category : #reading }
@@ -350,8 +350,8 @@ SoilMaterializer >> nextWideSymbol [
 
 { #category : #registry }
 SoilMaterializer >> registerObject: anObject [
-	objects ifNil: [ objects := OrderedCollection new ].
-	objects add: anObject 
+	internalObjects ifNil: [ internalObjects := OrderedCollection new ].
+	internalObjects add: anObject 
 ]
 
 { #category : #accessing }
